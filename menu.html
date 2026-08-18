@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sistema de Gestión de Camioneros</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+    <main class="menu-container">
+
+        <h1>Menú Principal</h1>
+
+
+        <!-- ================================= -->
+        <!-- MENÚ PRINCIPAL -->
+        <!-- ================================= -->
+
+        <div class="menu-grid">
+
+
+            <!-- REGISTRAR -->
+
+            <div class="menu-dropdown">
+
+                <button
+                    type="button"
+                    onclick="mostrarSubmenu('submenuRegistrar')"
+                >
+                    Registrar
+                </button>
+
+
+                <div
+                    id="submenuRegistrar"
+                    class="submenu"
+                >
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('camioneros')"
+                    >
+                        Camioneros
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('viajes')"
+                    >
+                        Viajes
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('camiones')"
+                    >
+                        Camiones
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('cargas')"
+                    >
+                        Tipos de carga
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- MODIFICAR -->
+
+            <div class="menu-dropdown">
+
+                <button
+                    type="button"
+                    onclick="mostrarSubmenu('submenuModificar')"
+                >
+                    Modificar
+                </button>
+
+
+                <div
+                    id="submenuModificar"
+                    class="submenu"
+                >
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('modificarCamioneros')"
+                    >
+                        Camioneros
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('modificarViajes')"
+                    >
+                        Viajes
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('modificarCamiones')"
+                    >
+                        Camiones
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('modificarCargas')"
+                    >
+                        Tipos de carga
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ELIMINAR -->
+
+            <div class="menu-dropdown">
+
+                <button
+                    type="button"
+                    onclick="mostrarSubmenu('submenuEliminar')"
+                >
+                    Eliminar
+                </button>
+
+
+                <div
+                    id="submenuEliminar"
+                    class="submenu"
+                >
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('eliminarCamioneros')"
+                    >
+                        Camioneros
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('eliminarViajes')"
+                    >
+                        Viajes
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('eliminarCamiones')"
+                    >
+                        Camiones
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="mostrarFormulario('eliminarCargas')"
+                    >
+                        Tipos de carga
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- HISTORIAL -->
+
+            <button
+                type="button"
+                onclick="mostrarFormulario('historial')"
+            >
+                Historial
+            </button>
+
+
+            <!-- INFORMES -->
+
+            <button
+                type="button"
+                onclick="mostrarFormulario('informes')"
+            >
+                Informes
+            </button>
+
+
+            <!-- PDF -->
+
+            <button
+                type="button"
+                onclick="mostrarFormulario('pdf')"
+            >
+                PDF
+            </button>
+
+
+            <!-- TURNOS -->
+
+            <button
+                type="button"
+                onclick="mostrarFormulario('turnos')"
+            >
+                Turnos
+            </button>
+
+
+        </div>
+
+
+        <!-- ================================= -->
+        <!-- CONTENIDO -->
+        <!-- ================================= -->
+
+        <section id="contenidoMenu">
+
+
+            <!-- ================================= -->
+            <!-- REGISTRAR CAMIONEROS -->
+            <!-- ================================= -->
+
+            <div
+                id="camioneros"
+                class="menu-formulario"
+            >
+
+                <h2>Registro de camioneros</h2>
+
+
+                <form id="camioneroForm">
+
+                    <div class="form-group">
+
+                        <label for="usuarioCamionero">
+                            Usuario
+                        </label>
+
+                        <input
+                            type="text"
+                            id="usuarioCamionero"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="contraseñaCamionero">
+                            Contraseña
+                        </label>
+
+                        <input
+                            type="password"
+                            id="contraseñaCamionero"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="direccion">
+                            Dirección
+                        </label>
+
+                        <input
+                            type="text"
+                            id="direccion"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="telefono">
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="telefono"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="dni">
+                            DNI
+                        </label>
+
+                        <input
+                            type="number"
+                            id="dni"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Registrar
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- REGISTRAR VIAJES -->
+            <!-- ================================= -->
+
+            <div
+                id="viajes"
+                class="menu-formulario"
+            >
+
+                <h2>Registro de viajes</h2>
+
+
+                <form id="viajeForm">
+
+                    <div class="form-group">
+
+                        <label for="origen">
+                            Origen
+                        </label>
+
+                        <input
+                            type="text"
+                            id="origen"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="destino">
+                            Destino
+                        </label>
+
+                        <input
+                            type="text"
+                            id="destino"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="fecha">
+                            Fecha de registro
+                        </label>
+
+                        <input
+                            type="date"
+                            id="fecha"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Registrar
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- REGISTRAR CAMIONES -->
+            <!-- ================================= -->
+
+            <div
+                id="camiones"
+                class="menu-formulario"
+            >
+
+                <h2>Registro de camiones</h2>
+
+
+                <form id="camionForm">
+
+                    <div class="form-group">
+
+                        <label for="patente">
+                            Patente
+                        </label>
+
+                        <input
+                            type="text"
+                            id="patente"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="marca">
+                            Marca
+                        </label>
+
+                        <input
+                            type="text"
+                            id="marca"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modelo">
+                            Modelo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modelo"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="capacidad">
+                            Capacidad
+                        </label>
+
+                        <input
+                            type="number"
+                            id="capacidad"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="dniCamionero">
+                            DNI camionero
+                        </label>
+
+                        <input
+                            type="number"
+                            id="dniCamionero"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Registrar
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- REGISTRAR TIPOS DE CARGA -->
+            <!-- ================================= -->
+
+            <div
+                id="cargas"
+                class="menu-formulario"
+            >
+
+                <h2>Registro de tipo de carga</h2>
+
+
+                <form id="cargaForm">
+
+                    <div class="form-group">
+
+                        <label for="nombreCarga">
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nombreCarga"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="descripcionCarga">
+                            Descripción
+                        </label>
+
+                        <input
+                            type="text"
+                            id="descripcionCarga"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Registrar
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- MODIFICAR CAMIONEROS -->
+            <!-- ================================= -->
+
+            <div
+                id="modificarCamioneros"
+                class="menu-formulario"
+            >
+
+                <h2>Modificar camionero</h2>
+
+
+                <form id="buscarCamioneroForm">
+
+                    <div class="form-group">
+
+                        <label for="dniBuscarCamionero">
+                            DNI del camionero
+                        </label>
+
+                        <input
+                            type="number"
+                            id="dniBuscarCamionero"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosCamionero"
+                    class="datos-modificar"
+                >
+
+                    <div class="form-group">
+
+                        <label for="modificarUsuario">
+                            Usuario
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarUsuario"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarContraseña">
+                            Contraseña
+                        </label>
+
+                        <input
+                            type="password"
+                            id="modificarContraseña"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarDireccion">
+                            Dirección
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarDireccion"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarTelefono">
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="modificarTelefono"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="guardarCambiosCamionero()"
+                    >
+                        Guardar cambios
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- MODIFICAR VIAJES -->
+            <!-- ================================= -->
+
+            <div
+                id="modificarViajes"
+                class="menu-formulario"
+            >
+
+                <h2>Modificar viaje</h2>
+
+
+                <form id="buscarViajeForm">
+
+                    <div class="form-group">
+
+                        <label for="idBuscarViaje">
+                            Identificador del viaje
+                        </label>
+
+                        <input
+                            type="number"
+                            id="idBuscarViaje"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosViaje"
+                    class="datos-modificar"
+                >
+
+                    <div class="form-group">
+
+                        <label for="modificarOrigen">
+                            Origen
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarOrigen"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarDestino">
+                            Destino
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarDestino"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarFecha">
+                            Fecha de registro
+                        </label>
+
+                        <input
+                            type="date"
+                            id="modificarFecha"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="guardarCambiosViaje()"
+                    >
+                        Guardar cambios
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- MODIFICAR CAMIONES -->
+            <!-- ================================= -->
+
+            <div
+                id="modificarCamiones"
+                class="menu-formulario"
+            >
+
+                <h2>Modificar camión</h2>
+
+
+                <form id="buscarCamionForm">
+
+                    <div class="form-group">
+
+                        <label for="patenteBuscarCamion">
+                            Patente
+                        </label>
+
+                        <input
+                            type="text"
+                            id="patenteBuscarCamion"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosCamion"
+                    class="datos-modificar"
+                >
+
+                    <div class="form-group">
+
+                        <label for="modificarPatente">
+                            Patente
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarPatente"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarMarca">
+                            Marca
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarMarca"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarModelo">
+                            Modelo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarModelo"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarCapacidad">
+                            Capacidad
+                        </label>
+
+                        <input
+                            type="number"
+                            id="modificarCapacidad"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarDniCamionero">
+                            DNI camionero
+                        </label>
+
+                        <input
+                            type="number"
+                            id="modificarDniCamionero"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="guardarCambiosCamion()"
+                    >
+                        Guardar cambios
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- MODIFICAR TIPOS DE CARGA -->
+            <!-- ================================= -->
+
+            <div
+                id="modificarCargas"
+                class="menu-formulario"
+            >
+
+                <h2>Modificar tipo de carga</h2>
+
+
+                <form id="buscarCargaForm">
+
+                    <div class="form-group">
+
+                        <label for="idBuscarCarga">
+                            Identificador del tipo de carga
+                        </label>
+
+                        <input
+                            type="number"
+                            id="idBuscarCarga"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosCarga"
+                    class="datos-modificar"
+                >
+
+                    <div class="form-group">
+
+                        <label for="modificarNombreCarga">
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarNombreCarga"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="modificarDescripcionCarga">
+                            Descripción
+                        </label>
+
+                        <input
+                            type="text"
+                            id="modificarDescripcionCarga"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="guardarCambiosCarga()"
+                    >
+                        Guardar cambios
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- ELIMINAR CAMIONEROS -->
+            <!-- ================================= -->
+
+            <div
+                id="eliminarCamioneros"
+                class="menu-formulario"
+            >
+
+                <h2>Eliminar camionero</h2>
+
+
+                <form id="buscarEliminarCamioneroForm">
+
+                    <div class="form-group">
+
+                        <label for="dniEliminarCamionero">
+                            DNI del camionero
+                        </label>
+
+                        <input
+                            type="number"
+                            id="dniEliminarCamionero"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosEliminarCamionero"
+                    class="datos-eliminar"
+                >
+
+                    <h3>Datos del camionero</h3>
+
+
+                    <p>
+                        Usuario:
+                        <strong id="eliminarUsuario">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        DNI:
+                        <strong id="eliminarDni">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Dirección:
+                        <strong id="eliminarDireccion">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Teléfono:
+                        <strong id="eliminarTelefono">
+                        </strong>
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="boton-eliminar"
+                        onclick="eliminarCamionero()"
+                    >
+                        Eliminar camionero
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- ELIMINAR VIAJES -->
+            <!-- ================================= -->
+
+            <div
+                id="eliminarViajes"
+                class="menu-formulario"
+            >
+
+                <h2>Eliminar viaje</h2>
+
+
+                <form id="buscarEliminarViajeForm">
+
+                    <div class="form-group">
+
+                        <label for="idEliminarViaje">
+                            Identificador del viaje
+                        </label>
+
+                        <input
+                            type="number"
+                            id="idEliminarViaje"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosEliminarViaje"
+                    class="datos-eliminar"
+                >
+
+                    <h3>Datos del viaje</h3>
+
+
+                    <p>
+                        ID:
+                        <strong id="eliminarIdViaje">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Origen:
+                        <strong id="eliminarOrigen">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Destino:
+                        <strong id="eliminarDestino">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Fecha:
+                        <strong id="eliminarFecha">
+                        </strong>
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="boton-eliminar"
+                        onclick="eliminarViaje()"
+                    >
+                        Eliminar viaje
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- ELIMINAR CAMIONES -->
+            <!-- ================================= -->
+
+            <div
+                id="eliminarCamiones"
+                class="menu-formulario"
+            >
+
+                <h2>Eliminar camión</h2>
+
+
+                <form id="buscarEliminarCamionForm">
+
+                    <div class="form-group">
+
+                        <label for="patenteEliminarCamion">
+                            Patente
+                        </label>
+
+                        <input
+                            type="text"
+                            id="patenteEliminarCamion"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosEliminarCamion"
+                    class="datos-eliminar"
+                >
+
+                    <h3>Datos del camión</h3>
+
+
+                    <p>
+                        Patente:
+                        <strong id="eliminarPatente">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Marca:
+                        <strong id="eliminarMarca">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Modelo:
+                        <strong id="eliminarModelo">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Capacidad:
+                        <strong id="eliminarCapacidad">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        DNI camionero:
+                        <strong id="eliminarDniCamionero">
+                        </strong>
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="boton-eliminar"
+                        onclick="eliminarCamion()"
+                    >
+                        Eliminar camión
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- ELIMINAR TIPOS DE CARGA -->
+            <!-- ================================= -->
+
+            <div
+                id="eliminarCargas"
+                class="menu-formulario"
+            >
+
+                <h2>Eliminar tipo de carga</h2>
+
+
+                <form id="buscarEliminarCargaForm">
+
+                    <div class="form-group">
+
+                        <label for="idEliminarCarga">
+                            Identificador del tipo de carga
+                        </label>
+
+                        <input
+                            type="number"
+                            id="idEliminarCarga"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <div
+                    id="datosEliminarCarga"
+                    class="datos-eliminar"
+                >
+
+                    <h3>Datos del tipo de carga</h3>
+
+
+                    <p>
+                        ID:
+                        <strong id="eliminarIdCarga">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Nombre:
+                        <strong id="eliminarNombreCarga">
+                        </strong>
+                    </p>
+
+
+                    <p>
+                        Descripción:
+                        <strong id="eliminarDescripcionCarga">
+                        </strong>
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="boton-eliminar"
+                        onclick="eliminarCarga()"
+                    >
+                        Eliminar tipo de carga
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- TURNOS -->
+            <!-- ================================= -->
+
+            <div
+                id="turnos"
+                class="menu-formulario"
+            >
+
+                <h2>Turnos</h2>
+
+
+                <p>
+
+                    Turno actual:
+
+                    <strong id="turnoActual">
+                        1
+                    </strong>
+
+                </p>
+
+
+                <button
+                    type="button"
+                    onclick="saltarTurno()"
+                >
+                    Saltar turno
+                </button>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- HISTORIAL -->
+            <!-- ================================= -->
+
+            <div
+                id="historial"
+                class="menu-formulario"
+            >
+
+                <h2>Historial</h2>
+
+
+                <p>
+                    Aquí se mostrará el historial
+                    de viajes registrados.
+                </p>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- INFORMES -->
+            <!-- ================================= -->
+
+            <div
+                id="informes"
+                class="menu-formulario"
+            >
+
+                <h2>Informes</h2>
+
+
+                <p>
+                    Aquí se mostrarán los informes
+                    del sistema.
+                </p>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- PDF -->
+            <!-- ================================= -->
+
+            <div
+                id="pdf"
+                class="menu-formulario"
+            >
+
+                <h2>PDF</h2>
+
+
+                <p>
+                    Aquí se generarán los informes
+                    en formato PDF.
+                </p>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
