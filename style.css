@@ -45,14 +45,15 @@ body {
 
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
     font-weight: bold;
 
 }
 
 
-.form-group input {
+.form-group input,
+.form-group select {
 
     width: 100%;
 
@@ -67,98 +68,27 @@ body {
 }
 
 
-.form-group input:focus {
-
-    outline: none;
-
-    border-color: #333;
-
-}
-
-
 /* ============================= */
-/* BOTONES */
-/* ============================= */
-
-button {
-
-    width: 100%;
-
-    padding: 12px;
-
-    border: none;
-
-    border-radius: 5px;
-
-    background-color: #333;
-
-    color: white;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-}
-
-
-button:hover {
-
-    background-color: #555;
-
-}
-
-
-/* ============================= */
-/* LOGIN */
-/* ============================= */
-
-.login-container {
-
-    width: 400px;
-
-    background-color: white;
-
-    padding: 40px;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 4px 15px rgba(0, 0, 0, 0.15);
-
-}
-
-
-.login-container h1 {
-
-    text-align: center;
-
-    margin-bottom: 30px;
-
-    font-size: 28px;
-
-}
-
-
-/* ============================= */
-/* MENÚ */
+/* CONTENEDOR */
 /* ============================= */
 
 .menu-container {
 
-    width: 900px;
+    width: 90%;
 
-    max-width: 90%;
+    max-width: 1200px;
+
+    margin: 40px auto;
+
+    padding: 30px;
 
     background-color: white;
-
-    padding: 40px;
 
     border-radius: 10px;
 
     box-shadow:
-        0 4px 15px rgba(0, 0, 0, 0.15);
+        0 4px 15px
+        rgba(0, 0, 0, 0.1);
 
 }
 
@@ -176,108 +106,42 @@ button:hover {
 /* BOTONES DEL MENÚ */
 /* ============================= */
 
-.menu-grid {
+.menu-botones {
 
     display: grid;
 
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap: 15px;
+    gap: 10px;
+
+    margin-bottom: 30px;
 
 }
 
 
-.menu-grid button {
+button {
 
-    padding: 20px;
+    padding: 12px 18px;
 
-}
-
-
-/* ============================= */
-/* MENÚ DESPLEGABLE */
-/* ============================= */
-
-.menu-dropdown {
-
-    position: relative;
-
-}
-
-
-.menu-dropdown > button {
-
-    width: 100%;
-
-}
-
-
-/* ============================= */
-/* SUBMENÚ */
-/* ============================= */
-
-.submenu {
-
-    display: none;
-
-    position: absolute;
-
-    top: 100%;
-
-    left: 0;
-
-    width: 100%;
-
-    background-color: white;
-
-    border: 1px solid #ccc;
+    border: none;
 
     border-radius: 5px;
 
-    padding: 5px;
+    background-color: #333;
 
-    z-index: 10;
+    color: white;
 
-}
+    cursor: pointer;
 
-
-.submenu.activo {
-
-    display: block;
+    font-size: 15px;
 
 }
 
 
-.submenu button {
+button:hover {
 
-    background-color: white;
-
-    color: #333;
-
-    text-align: left;
-
-    font-size: 14px;
-
-    padding: 10px;
-
-}
-
-
-.submenu button:hover {
-
-    background-color: #f0f0f0;
-
-}
-
-
-/* ============================= */
-/* CONTENIDO */
-/* ============================= */
-
-#contenidoMenu {
-
-    margin-top: 30px;
+    background-color: #555;
 
 }
 
@@ -290,15 +154,9 @@ button:hover {
 
     display: none;
 
-    margin-top: 25px;
+    padding: 25px;
 
-    padding: 30px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 8px;
-
-    background-color: #fafafa;
+    border-top: 1px solid #ddd;
 
 }
 
@@ -314,83 +172,159 @@ button:hover {
 
     margin-bottom: 25px;
 
+}
+
+
+/* ============================= */
+/* TABLAS */
+/* ============================= */
+
+.tabla-contenedor {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+table th {
+
+    background-color: #333;
+
+    color: white;
+
+    padding: 12px;
+
+    text-align: left;
+
+}
+
+
+table td {
+
+    padding: 12px;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+
+table tbody tr:hover {
+
+    background-color: #f1f1f1;
+
+}
+
+
+/* ============================= */
+/* HISTORIAL */
+/* ============================= */
+
+.historial-filtros {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.mensaje {
+
+    margin-top: 20px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+}
+
+
+/* ============================= */
+/* INFORMES */
+/* ============================= */
+
+.informe-filtros {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.informe-resumen {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.informe-card {
+
+    padding: 20px;
+
+    background-color: #f5f5f5;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
     text-align: center;
 
 }
 
 
-.menu-formulario p {
+.informe-card h3 {
 
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+
+    font-size: 16px;
+
+}
+
+
+.informe-card p {
+
+    font-size: 28px;
+
+    font-weight: bold;
 
 }
 
 
 /* ============================= */
-/* MODIFICAR */
+/* BOTÓN ELIMINAR */
 /* ============================= */
-
-.datos-modificar {
-
-    display: none;
-
-    margin-top: 30px;
-
-    padding-top: 25px;
-
-    border-top: 1px solid #ccc;
-
-}
-
-
-.datos-modificar.activo {
-
-    display: block;
-
-}
-
-
-/* ============================= */
-/* ELIMINAR */
-/* ============================= */
-
-.datos-eliminar {
-
-    display: none;
-
-    margin-top: 30px;
-
-    padding-top: 25px;
-
-    border-top: 1px solid #ccc;
-
-}
-
-
-.datos-eliminar.activo {
-
-    display: block;
-
-}
-
-
-.datos-eliminar h3 {
-
-    margin-bottom: 20px;
-
-}
-
-
-.datos-eliminar p {
-
-    padding: 8px 0;
-
-}
-
 
 .boton-eliminar {
-
-    margin-top: 20px;
 
     background-color: #b22222;
 
@@ -400,5 +334,559 @@ button:hover {
 .boton-eliminar:hover {
 
     background-color: #8b0000;
+
+}
+
+
+/* ============================= */
+/* TURNOS */
+/* ============================= */
+
+.turnos-informacion {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr;
+
+    gap: 15px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.turno-estado,
+.turno-numero {
+
+    padding: 20px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    background-color: white;
+
+    text-align: center;
+
+}
+
+
+.turno-estado h3,
+.turno-numero h3 {
+
+    margin-bottom: 15px;
+
+}
+
+
+.turno-numero p {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+}
+
+
+/* ============================= */
+/* ESTADOS */
+/* ============================= */
+
+.estado-disponible {
+
+    color: #198754;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    margin-bottom: 15px;
+
+}
+
+
+.estado-no-disponible {
+
+    color: #b22222;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    margin-bottom: 15px;
+
+}
+
+
+/* ============================= */
+/* SOLICITUDES */
+/* ============================= */
+
+.solicitudes-turnos {
+
+    margin-bottom: 30px;
+
+}
+
+
+.solicitudes-turnos > h3 {
+
+    margin-bottom: 20px;
+
+}
+
+
+.lista-solicitudes {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+
+}
+
+
+.solicitud-viaje {
+
+    padding: 20px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    background-color: white;
+
+}
+
+
+.solicitud-viaje h4 {
+
+    margin-bottom: 15px;
+
+}
+
+
+.solicitud-viaje p {
+
+    margin-bottom: 8px;
+
+}
+
+
+/* ============================= */
+/* ACCIONES DE SOLICITUD */
+/* ============================= */
+
+.acciones-solicitud {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+
+.acciones-solicitud button {
+
+    font-size: 14px;
+
+}
+
+
+.boton-rechazar {
+
+    background-color: #b22222;
+
+}
+
+
+.boton-rechazar:hover {
+
+    background-color: #8b0000;
+
+}
+
+
+/* ============================= */
+/* TABLA DE TURNOS */
+/* ============================= */
+
+.lista-turnos {
+
+    margin-top: 30px;
+
+}
+
+
+.lista-turnos h3 {
+
+    margin-bottom: 20px;
+
+}
+
+
+#tablaTurnos {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+
+#tablaTurnos th {
+
+    background-color: #333;
+
+    color: white;
+
+    padding: 12px;
+
+    text-align: left;
+
+}
+
+
+#tablaTurnos td {
+
+    padding: 12px;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+
+#tablaTurnos tbody tr:hover {
+
+    background-color: #f1f1f1;
+
+}
+
+
+/* ============================= */
+/* CONTROLES DE TURNO */
+/* ============================= */
+
+.controles-turno {
+
+    margin-top: 25px;
+
+}
+
+
+.mensaje-turnos {
+
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+}
+
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 800px) {
+
+    .menu-botones {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .historial-filtros,
+    .informe-filtros {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .informe-resumen {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .turnos-informacion {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .lista-solicitudes {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .menu-container {
+
+        width: 95%;
+
+        padding: 15px;
+
+    }
+
+
+    .menu-botones {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .informe-resumen {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .acciones-solicitud {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+/* ============================= */
+/* PDF */
+/* ============================= */
+
+.descripcion-pdf {
+
+    margin-bottom: 25px;
+
+    color: #555;
+
+}
+
+
+.pdf-filtros {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.pdf-opciones {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 10px;
+
+}
+
+
+.boton-secundario {
+
+    background-color: #777;
+
+}
+
+
+.boton-secundario:hover {
+
+    background-color: #555;
+
+}
+
+
+#mensajePDF {
+
+    margin-top: 20px;
+
+}
+
+
+@media (max-width: 800px) {
+
+    .pdf-filtros {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .pdf-opciones {
+
+        flex-direction: column;
+
+    }
+
+}
+/* ================================= */
+/* PDF */
+/* ================================= */
+
+.pdf-filtros {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.pdf-filtros .form-group {
+
+    margin-bottom: 0;
+
+}
+
+
+.pdf-filtros select,
+.pdf-filtros input {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 5px;
+
+    font-size: 15px;
+
+    box-sizing: border-box;
+
+}
+
+
+.pdf-filtros select:focus,
+.pdf-filtros input:focus {
+
+    outline: none;
+
+    border-color: #333;
+
+}
+
+
+/* ================================= */
+/* BOTONES PDF */
+/* ================================= */
+
+.pdf-botones {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+}
+
+
+.pdf-botones button {
+
+    width: 100%;
+
+}
+
+
+/*
+    Botón secundario
+    para limpiar filtros.
+*/
+
+.boton-secundario {
+
+    background-color: #777;
+
+}
+
+
+.boton-secundario:hover {
+
+    background-color: #555;
+
+}
+
+
+/* ================================= */
+/* MENSAJE PDF */
+/* ================================= */
+
+.mensaje-pdf {
+
+    margin-top: 20px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    min-height: 20px;
+
+}
+
+
+/* ================================= */
+/* RESPONSIVE PDF */
+/* ================================= */
+
+@media (max-width: 800px) {
+
+    .pdf-filtros {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .pdf-botones {
+
+        grid-template-columns:
+            1fr;
+
+    }
 
 }
