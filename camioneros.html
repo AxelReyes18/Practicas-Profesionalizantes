@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Camionero</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <main class="login-container">
+        <section class="login-card" style="max-width: 500px; text-align: center;">
+            <header class="login-header">
+                <h2>Panel del Camionero</h2>
+                <p id="camionero-nombre-display" style="color: #64748b; margin-top: 5px; font-weight: 500;">Cargando perfil...</p>
+            </header>
+
+            <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                <span style="font-size: 0.85rem; color: #64748b; font-weight: bold; letter-spacing: 1px;">ESTADO ACTUAL</span>
+                <div id="badge-disponibilidad" style="margin-top: 10px; font-size: 1.2rem; font-weight: bold; padding: 8px 16px; border-radius: 20px; display: inline-block;">
+                    --
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button type="button" class="btn-primary" style="background-color: #16a34a; flex: 1;" onclick="cambiarMiDisponibilidad('Disponible')">Marcar Disponible</button>
+                <button type="button" class="btn-primary" style="background-color: #dc2626; flex: 1;" onclick="cambiarMiDisponibilidad('No disponible')">Marcar No Disponible</button>
+            </div>
+
+            <div id="mensaje-camionero" class="mensaje-resultado" style="margin-top: 15px;"></div>
+
+            <button type="button" onclick="cerrarSesion()" style="margin-top: 25px; background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">
+                Cerrar Sesión
+            </button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
