@@ -1,892 +1,459 @@
-/* ============================= */
-/* CONFIGURACIÓN GENERAL */
-/* ============================= */
-
+/* ==========================================
+   1. RESET Y ESTILOS GENERALES
+   ========================================== */
 * {
-
-    margin: 0;
-
-    padding: 0;
-
     box-sizing: border-box;
-
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 
 body {
-
-    font-family: Arial, sans-serif;
-
-    background-color: #f2f2f2;
-
+    background-color: #f0f2f5;
+    color: #333;
     min-height: 100vh;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
 }
 
+/* ==========================================
+   2. PANTALLA DE LOGIN (INDEX)
+   ========================================== */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-/* ============================= */
-/* FORMULARIOS */
-/* ============================= */
+.login-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ==========================================
+   3. ESTRUCTURA Y SIDEBAR (ADMIN / MENU)
+   ========================================== */
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: #38bdf8;
+    text-align: center;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 15px;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-btn {
+    background-color: transparent;
+    color: #94a3b8;
+    border: none;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.nav-btn:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+.nav-btn.active {
+    background-color: #0284c7;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.btn-logout {
+    display: block;
+    text-align: center;
+    background-color: #ef4444;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 20px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-logout:hover {
+    background-color: #dc2626;
+}
+
+/* ÁREA PRINCIPAL Y SECCIONES */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.modulo-seccion {
+    display: none;
+}
+
+.modulo-seccion.active {
+    display: block;
+}
+
+.modulo-seccion h2 {
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-bottom: 20px;
+}
+
+.modulo-card {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+}
+
+/* ==========================================
+   4. FORMULARIOS, INPUTS Y BOTONES
+   ========================================== */
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
 .form-group {
-
-    margin-bottom: 20px;
-
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
-
 
 .form-group label {
-
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-weight: bold;
-
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
 }
 
-
-.form-group input,
+.form-group input, 
 .form-group select {
-
-    width: 100%;
-
-    padding: 10px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 5px;
-
-    font-size: 15px;
-
-}
-
-
-/* ============================= */
-/* CONTENEDOR */
-/* ============================= */
-
-.menu-container {
-
-    width: 90%;
-
-    max-width: 1200px;
-
-    margin: 40px auto;
-
-    padding: 30px;
-
-    background-color: white;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 4px 15px
-        rgba(0, 0, 0, 0.1);
-
-}
-
-
-.menu-container h1 {
-
-    text-align: center;
-
-    margin-bottom: 30px;
-
-}
-
-
-/* ============================= */
-/* BOTONES DEL MENÚ */
-/* ============================= */
-
-.menu-botones {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 10px;
-
-    margin-bottom: 30px;
-
-}
-
-
-button {
-
-    padding: 12px 18px;
-
-    border: none;
-
-    border-radius: 5px;
-
-    background-color: #333;
-
-    color: white;
-
-    cursor: pointer;
-
-    font-size: 15px;
-
-}
-
-
-button:hover {
-
-    background-color: #555;
-
-}
-
-
-/* ============================= */
-/* FORMULARIOS DEL MENÚ */
-/* ============================= */
-
-.menu-formulario {
-
-    display: none;
-
-    padding: 25px;
-
-    border-top: 1px solid #ddd;
-
-}
-
-
-.menu-formulario.activo {
-
-    display: block;
-
-}
-
-
-.menu-formulario h2 {
-
-    margin-bottom: 25px;
-
-}
-
-
-/* ============================= */
-/* TABLAS */
-/* ============================= */
-
-.tabla-contenedor {
-
-    width: 100%;
-
-    overflow-x: auto;
-
-}
-
-
-table {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-}
-
-
-table th {
-
-    background-color: #333;
-
-    color: white;
-
-    padding: 12px;
-
-    text-align: left;
-
-}
-
-
-table td {
-
-    padding: 12px;
-
-    border-bottom: 1px solid #ddd;
-
-}
-
-
-table tbody tr:hover {
-
-    background-color: #f1f1f1;
-
-}
-
-
-/* ============================= */
-/* HISTORIAL */
-/* ============================= */
-
-.historial-filtros {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 25px;
-
-}
-
-
-.mensaje {
-
-    margin-top: 20px;
-
-    text-align: center;
-
-    font-weight: bold;
-
-}
-
-
-/* ============================= */
-/* INFORMES */
-/* ============================= */
-
-.informe-filtros {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 30px;
-
-}
-
-
-.informe-resumen {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 30px;
-
-}
-
-
-.informe-card {
-
-    padding: 20px;
-
-    background-color: #f5f5f5;
-
-    border: 1px solid #ddd;
-
-    border-radius: 8px;
-
-    text-align: center;
-
-}
-
-
-.informe-card h3 {
-
-    margin-bottom: 10px;
-
-    font-size: 16px;
-
-}
-
-
-.informe-card p {
-
-    font-size: 28px;
-
-    font-weight: bold;
-
-}
-
-
-/* ============================= */
-/* BOTÓN ELIMINAR */
-/* ============================= */
-
-.boton-eliminar {
-
-    background-color: #b22222;
-
-}
-
-
-.boton-eliminar:hover {
-
-    background-color: #8b0000;
-
-}
-
-
-/* ============================= */
-/* TURNOS */
-/* ============================= */
-
-.turnos-informacion {
-
-    display: grid;
-
-    grid-template-columns:
-        2fr 1fr 1fr;
-
-    gap: 15px;
-
-    margin-bottom: 30px;
-
-}
-
-
-.turno-estado,
-.turno-numero {
-
-    padding: 20px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 8px;
-
-    background-color: white;
-
-    text-align: center;
-
-}
-
-
-.turno-estado h3,
-.turno-numero h3 {
-
-    margin-bottom: 15px;
-
-}
-
-
-.turno-numero p {
-
-    font-size: 30px;
-
-    font-weight: bold;
-
-}
-
-
-/* ============================= */
-/* ESTADOS */
-/* ============================= */
-
-.estado-disponible {
-
-    color: #198754;
-
-    font-size: 20px;
-
-    font-weight: bold;
-
-    margin-bottom: 15px;
-
-}
-
-
-.estado-no-disponible {
-
-    color: #b22222;
-
-    font-size: 20px;
-
-    font-weight: bold;
-
-    margin-bottom: 15px;
-
-}
-
-
-/* ============================= */
-/* SOLICITUDES */
-/* ============================= */
-
-.solicitudes-turnos {
-
-    margin-bottom: 30px;
-
-}
-
-
-.solicitudes-turnos > h3 {
-
-    margin-bottom: 20px;
-
-}
-
-
-.lista-solicitudes {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 15px;
-
-}
-
-
-.solicitud-viaje {
-
-    padding: 20px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 8px;
-
-    background-color: white;
-
-}
-
-
-.solicitud-viaje h4 {
-
-    margin-bottom: 15px;
-
-}
-
-
-.solicitud-viaje p {
-
-    margin-bottom: 8px;
-
-}
-
-
-/* ============================= */
-/* ACCIONES DE SOLICITUD */
-/* ============================= */
-
-.acciones-solicitud {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 10px;
-
-    margin-top: 20px;
-
-}
-
-
-.acciones-solicitud button {
-
-    font-size: 14px;
-
-}
-
-
-.boton-rechazar {
-
-    background-color: #b22222;
-
-}
-
-
-.boton-rechazar:hover {
-
-    background-color: #8b0000;
-
-}
-
-
-/* ============================= */
-/* TABLA DE TURNOS */
-/* ============================= */
-
-.lista-turnos {
-
-    margin-top: 30px;
-
-}
-
-
-.lista-turnos h3 {
-
-    margin-bottom: 20px;
-
-}
-
-
-#tablaTurnos {
-
-    width: 100%;
-
-    border-collapse: collapse;
-
-}
-
-
-#tablaTurnos th {
-
-    background-color: #333;
-
-    color: white;
-
-    padding: 12px;
-
-    text-align: left;
-
-}
-
-
-#tablaTurnos td {
-
-    padding: 12px;
-
-    border-bottom: 1px solid #ddd;
-
-}
-
-
-#tablaTurnos tbody tr:hover {
-
-    background-color: #f1f1f1;
-
-}
-
-
-/* ============================= */
-/* CONTROLES DE TURNO */
-/* ============================= */
-
-.controles-turno {
-
-    margin-top: 25px;
-
-}
-
-
-.mensaje-turnos {
-
-    margin-top: 15px;
-
-    text-align: center;
-
-    font-weight: bold;
-
-}
-
-
-/* ============================= */
-/* RESPONSIVE */
-/* ============================= */
-
-@media (max-width: 800px) {
-
-    .menu-botones {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-
-    .historial-filtros,
-    .informe-filtros {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .informe-resumen {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-    }
-
-
-    .turnos-informacion {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .lista-solicitudes {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-}
-
-
-@media (max-width: 500px) {
-
-    .menu-container {
-
-        width: 95%;
-
-        padding: 15px;
-
-    }
-
-
-    .menu-botones {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .informe-resumen {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .acciones-solicitud {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-}
-
-/* ============================= */
-/* PDF */
-/* ============================= */
-
-.descripcion-pdf {
-
-    margin-bottom: 25px;
-
-    color: #555;
-
-}
-
-
-.pdf-filtros {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 25px;
-
-}
-
-
-.pdf-opciones {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 10px;
-
-}
-
-
-.boton-secundario {
-
-    background-color: #777;
-
-}
-
-
-.boton-secundario:hover {
-
-    background-color: #555;
-
-}
-
-
-#mensajePDF {
-
-    margin-top: 20px;
-
-}
-
-
-@media (max-width: 800px) {
-
-    .pdf-filtros {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .pdf-opciones {
-
-        flex-direction: column;
-
-    }
-
-}
-/* ================================= */
-/* PDF */
-/* ================================= */
-
-.pdf-filtros {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr 1fr;
-
-    gap: 15px;
-
-    margin-bottom: 25px;
-
-}
-
-
-.pdf-filtros .form-group {
-
-    margin-bottom: 0;
-
-}
-
-
-.pdf-filtros select,
-.pdf-filtros input {
-
-    width: 100%;
-
-    padding: 10px;
-
-    border: 1px solid #ccc;
-
-    border-radius: 5px;
-
-    font-size: 15px;
-
-    box-sizing: border-box;
-
-}
-
-
-.pdf-filtros select:focus,
-.pdf-filtros input:focus {
-
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
     outline: none;
-
-    border-color: #333;
-
-}
-
-
-/* ================================= */
-/* BOTONES PDF */
-/* ================================= */
-
-.pdf-botones {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 15px;
-
-    margin-top: 20px;
-
-}
-
-
-.pdf-botones button {
-
     width: 100%;
-
 }
 
-
-/*
-    Botón secundario
-    para limpiar filtros.
-*/
-
-.boton-secundario {
-
-    background-color: #777;
-
+.form-group input:focus, 
+.form-group select:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
-
-.boton-secundario:hover {
-
-    background-color: #555;
-
-}
-
-
-/* ================================= */
-/* MENSAJE PDF */
-/* ================================= */
-
-.mensaje-pdf {
-
-    margin-top: 20px;
-
-    text-align: center;
-
+.btn-primary {
+    background-color: #0284c7;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
     font-weight: bold;
-
-    min-height: 20px;
-
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
 }
 
+.btn-primary:hover {
+    background-color: #0369a1;
+}
 
-/* ================================= */
-/* RESPONSIVE PDF */
-/* ================================= */
+/* MENSAJES DE ESTADO (ÉXITO / ERROR) */
+.mensaje-resultado {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    display: none;
+}
 
-@media (max-width: 800px) {
+.mensaje-resultado.exito {
+    display: block;
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
 
-    .pdf-filtros {
+.mensaje-resultado.error {
+    display: block;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
 
-        grid-template-columns:
-            1fr;
+/* ==========================================
+   5. TABLAS Y BADGES / MEDALLAS DE ESTADO
+   ========================================== */
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 15px;
+}
 
+.tabla-custom {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-custom th, 
+.tabla-custom td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.tabla-custom th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tabla-custom tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.badge-disponible, 
+.badge-completado, 
+.badge-exito {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.badge-nodisponible, 
+.badge-cancelado, 
+.badge-error {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.badge-proceso, 
+.badge-asignado, 
+.badge-alerta {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+.badge-pendiente, 
+.badge-info {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+/* ==========================================
+   6. NUEVO: PANEL DEL CAMIONERO (CAMIONERO.HTML)
+   ========================================== */
+.camionero-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 25px 20px;
+}
+
+/* Encabezado del Portal Camionero */
+.camionero-header {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 20px 25px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.camionero-header h1 {
+    font-size: 1.4rem;
+    color: #38bdf8;
+}
+
+.camionero-header .subtitulo {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+/* Grilla de Tarjetas Dashboard */
+.camionero-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.camionero-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.camionero-card h3 {
+    font-size: 1rem;
+    color: #475569;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 8px;
+}
+
+/* Selector de Disponibilidad interactivo */
+.disponibilidad-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.estado-actual {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.acciones-disponibilidad {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-estado {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.btn-estado:active {
+    transform: scale(0.98);
+}
+
+.btn-estado-activo {
+    background-color: #22c55e;
+    color: white;
+}
+
+.btn-estado-activo:hover {
+    background-color: #16a34a;
+}
+
+.btn-estado-inactivo {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-estado-inactivo:hover {
+    background-color: #dc2626;
+}
+
+/* Card Historial y Viajes Asignados */
+.seccion-historial {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.seccion-historial h2 {
+    font-size: 1.2rem;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+
+/* ==========================================
+   7. RESPONSIVE / MEDIA QUERIES
+   ========================================== */
+@media (max-width: 768px) {
+    .layout-container {
+        flex-direction: column;
     }
 
-
-    .pdf-botones {
-
-        grid-template-columns:
-            1fr;
-
+    .sidebar {
+        width: 100%;
+        padding: 15px;
     }
 
+    .nav-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .main-content {
+        padding: 20px 15px;
+    }
+
+    .camionero-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .camionero-header .btn-logout {
+        width: 100%;
+        margin-top: 0;
+    }
 }
