@@ -3,262 +3,786 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Logística - Panel Administrador</title>
+    <title>Panel de Administración - Logística Express</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="app-admin" class="layout-container">
-        <!-- BARRA LATERAL NAVEGABLE -->
+    <div class="layout-container">
+        
+        <!-- SIDEBAR DE NAVEGACIÓN -->
         <aside class="sidebar">
-            <h2>Sistema Logística</h2>
-            <nav class="nav-menu">
-                <button class="nav-btn active" onclick="mostrarSeccion('sec-registrar-camionero', this)">1. Registrar Camionero</button>
-                <button class="nav-btn" onclick="mostrarSeccion('sec-modificar-camionero', this)">2. Modificar Camionero</button>
-                <button class="nav-btn" onclick="mostrarSeccion('sec-eliminar-camionero', this)">3. Eliminar Camionero</button>
-                <button class="nav-btn" onclick="mostrarSeccion('sec-consultar-historial', this)">4. Consultar Historial</button>
-                <button class="nav-btn" onclick="mostrarSeccion('sec-generar-informes', this)">5. Generar Informes</button>
-                <button class="nav-btn" onclick="mostrarSeccion('sec-gestionar-turnos', this); consultarTurnoActual();">6. Gestionar Turnos</button>
-                <button class="nav-btn" onclick="mostrarSeccion('sec-validar-disponibilidad', this); cargarOpcionesDisponibilidad();">7. Validar Disponibilidad</button>
-                <button class="nav-btn" onclick="mostrarSeccion('sec-historial-cambios', this)">8. Historial de Cambios</button>
-            </nav>
-            <button type="button" class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+            <div>
+                <h2>Logística Express</h2>
+                <nav class="nav-menu">
+                    <button class="nav-btn active" onclick="cambiarModulo('seccionTurnos', this)">Turnos y Choferes</button>
+                    <button class="nav-btn" onclick="cambiarModulo('seccionViajes', this)">Gestión de Viajes</button>
+                    <button class="nav-btn" onclick="cambiarModulo('seccionCargas', this)">Tipos de Carga</button>
+                    <button class="nav-btn" onclick="cambiarModulo('seccionReportes', this)">Reportes</button>
+                    <button class="nav-btn" onclick="cambiarModulo('seccionTrazabilidad', this)">Historial Auditoría</button>
+                </nav>
+            </div>
+            <div>
+                <p style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-bottom: 8px;">
+                    Operador: <strong id="lblNombreUsuario" style="color:#38bdf8;">Admin</strong>
+                </p>
+                <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+            </div>
         </aside>
 
-        <!-- ÁREA PRINCIPAL DE CONTENIDO -->
+        <!-- CONTENIDO PRINCIPAL -->
         <main class="main-content">
 
-            <!-- 1. REGISTRAR CAMIONERO -->
-            <section id="sec-registrar-camionero" class="modulo-seccion active">
-                <h2>1. Registrar Camionero</h2>
+            <!-- MÓDULO 1: CONTROL DE TURNOS Y CHOFERES -->
+            <section id="seccionTurnos" class="modulo-seccion active">
+                <h2>Control de Turnos Cíclicos y Choferes</h2>
+                
+                <div class="banner-turno">
+                    <div>
+                        <span style="font-size: 0.85rem; text-transform: uppercase; color: #0284c7; font-weight: bold;">Siguiente Turno Recomendado:</span>
+                        <h3 id="lblTurnoSugerido">Cargando turno...</h3>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-primary" onclick="abrirModalNuevoViajeSugerido()">Asignar Viaje Directo</button>
+                        <button class="btn-secondary" onclick="saltarTurnoException()">Saltar Turno (Excepción)</button>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3>Choferes Registrados (Clic para gestionar)</h3>
+                    <button class="btn-primary" style="width: auto;" onclick="abrirModalNuevoChofer()">+ Agregar Chofer</button>
+                </div>
+
+                <div id="gridChoferes">Cargando choferes...</div>
+            </section>
+
+            <!-- MÓDULO 2: GESTIÓN DE VIAJES -->
+            <section id="seccionViajes" class="modulo-seccion">
+                <h2>Gestión de Viajes Registrados</h2>
+                <div class="tabla-contenedor">
+                    <table class="tabla-custom">
+                        <thead>
+                            <tr>
+                                <th># Viaje</th>
+                                <th>Fecha</th>
+                                <th>Chofer / Patente</th>
+                                <th>Ruta (Origen ➔ Destino)</th>
+                                <th>Tipo Carga</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaViajes">
+                            <tr><td colspan="7" style="text-align: center;">Cargando viajes...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- MÓDULO 3: GESTIÓN DE TIPOS DE CARGA (CRUD) -->
+            <section id="seccionCargas" class="modulo-seccion">
+                <h2>Gestión de Tipos de Carga</h2>
                 <div class="modulo-card">
-                    <form id="form-registrar-camionero" class="form-grid">
+                    <form onsubmit="crearTipoCarga(event)">
                         <div class="form-group">
-                            <label for="reg-nombre">Nombre</label>
-                            <input type="text" id="reg-nombre" placeholder="Ej: Juan" required>
+                            <label>Nombre del Tipo de Carga</label>
+                            <input type="text" id="inputNuevaCarga" placeholder="ej. Soja, Trigo, Maíz" required>
                         </div>
-
-                        <div class="form-group">
-                            <label for="reg-apellido">Apellido</label>
-                            <input type="text" id="reg-apellido" placeholder="Ej: Pérez" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="reg-dni">DNI</label>
-                            <input type="text" id="reg-dni" placeholder="Ej: 12345678" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="reg-telefono">Teléfono</label>
-                            <input type="text" id="reg-telefono" placeholder="Ej: 1123456789" required>
-                        </div>
-
-                        <button type="submit" class="btn-primary">Registrar Camionero</button>
+                        <button type="submit" class="btn-primary" style="margin-top: 10px;">Añadir Carga</button>
                     </form>
-                    <div id="mensaje-registro" class="mensaje-resultado"></div>
+                    
+                    <h3 style="margin-top: 25px; margin-bottom: 10px; font-size: 1.1rem;">Cargas Disponibles</h3>
+                    <ul id="listaTiposCarga" style="list-style: none; display: flex; flex-direction: column; gap: 8px;">
+                        <li>Cargando tipos de carga...</li>
+                    </ul>
                 </div>
             </section>
 
-            <!-- 2. MODIFICAR CAMIONERO -->
-            <section id="sec-modificar-camionero" class="modulo-seccion">
-                <h2>2. Modificar Camionero</h2>
-                <div class="modulo-card">
-                    <form id="form-buscar-modificar" class="form-grid">
+            <!-- MÓDULO 4: REPORTES -->
+            <section id="seccionReportes" class="modulo-seccion">
+                <h2>Generación de Reportes Filtrados</h2>
+                <div class="modulo-card" style="max-width: 100%; margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                         <div class="form-group">
-                            <label for="mod-buscar-dni">Buscar Camionero por DNI</label>
-                            <input type="text" id="mod-buscar-dni" placeholder="Ej: 12345678" required>
+                            <label>Fecha Desde</label>
+                            <input type="date" id="repFechaDesde">
                         </div>
-                        <button type="submit" class="btn-primary">Buscar</button>
-                    </form>
-
-                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
-
-                    <form id="form-guardar-modificacion" class="form-grid" style="display: none;">
                         <div class="form-group">
-                            <label for="mod-nombre">Nombre</label>
-                            <input type="text" id="mod-nombre" required>
+                            <label>Fecha Hasta</label>
+                            <input type="date" id="repFechaHasta">
                         </div>
-
                         <div class="form-group">
-                            <label for="mod-apellido">Apellido</label>
-                            <input type="text" id="mod-apellido" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="mod-telefono">Teléfono</label>
-                            <input type="text" id="mod-telefono" required>
-                        </div>
-
-                        <button type="submit" class="btn-primary">Guardar Cambios</button>
-                    </form>
-
-                    <div id="mensaje-modificar" class="mensaje-resultado"></div>
-                </div>
-            </section>
-
-            <!-- 3. ELIMINAR CAMIONERO -->
-            <section id="sec-eliminar-camionero" class="modulo-seccion">
-                <h2>3. Eliminar Camionero</h2>
-                <div class="modulo-card">
-                    <form id="form-buscar-eliminar" class="form-grid">
-                        <div class="form-group">
-                            <label for="eli-buscar-dni">Buscar Camionero por DNI</label>
-                            <input type="text" id="eli-buscar-dni" placeholder="Ej: 12345678" required>
-                        </div>
-                        <button type="submit" class="btn-primary">Buscar</button>
-                    </form>
-
-                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
-
-                    <div id="card-confirmar-eliminar" style="display: none;">
-                        <p style="margin-bottom: 8px;"><strong>Camionero a eliminar:</strong></p>
-                        <p><strong>Nombre:</strong> <span id="eli-info-nombre"></span></p>
-                        <p><strong>Apellido:</strong> <span id="eli-info-apellido"></span></p>
-                        <p><strong>Teléfono:</strong> <span id="eli-info-telefono"></span></p>
-                        
-                        <button type="button" id="btn-confirmar-eliminar" class="btn-primary" style="background-color: #ef4444; margin-top: 15px;" onclick="ejecutarEliminacion()">
-                            Confirmar Eliminación
-                        </button>
-                    </div>
-
-                    <div id="mensaje-eliminar" class="mensaje-resultado"></div>
-                </div>
-            </section>
-
-            <!-- 4. CONSULTAR HISTORIAL DE VIAJES -->
-            <section id="sec-consultar-historial" class="modulo-seccion">
-                <h2>4. Consultar Historial de Viajes</h2>
-                <div class="modulo-card" style="max-width: 800px;">
-                    <form id="form-buscar-historial" class="form-grid">
-                        <div class="form-group">
-                            <label for="his-buscar-dni">DNI del Camionero</label>
-                            <input type="text" id="his-buscar-dni" placeholder="Ej: 12345678" required>
-                        </div>
-                        <button type="submit" class="btn-primary">Buscar Historial</button>
-                    </form>
-
-                    <div id="contenedor-tabla-historial" style="margin-top: 20px; display: none;">
-                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
-                            <thead>
-                                <tr style="background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
-                                    <th style="padding: 10px;">ID Viaje</th>
-                                    <th style="padding: 10px;">Origen</th>
-                                    <th style="padding: 10px;">Destino</th>
-                                    <th style="padding: 10px;">Fecha</th>
-                                    <th style="padding: 10px;">Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabla-historial-body"></tbody>
-                        </table>
-                    </div>
-
-                    <div id="mensaje-historial" class="mensaje-resultado"></div>
-                </div>
-            </section>
-
-            <!-- 5. GENERAR INFORMES -->
-            <section id="sec-generar-informes" class="modulo-seccion">
-                <h2>5. Informe de Desempeño por Conductor</h2>
-                <div class="modulo-card" style="max-width: 850px;">
-                    <form id="form-generar-informe" class="form-grid">
-                        <div class="form-group">
-                            <label for="inf-buscar-dni">DNI del Conductor</label>
-                            <input type="text" id="inf-buscar-dni" placeholder="Ej: 12345678" required>
-                        </div>
-                        <button type="submit" class="btn-primary">Generar Informe</button>
-                    </form>
-
-                    <div id="contenedor-reporte-conductor" style="margin-top: 25px; display: none;">
-                        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 20px;">
-                            <h3 style="margin: 0; color: #0f172a;">Conductor: <span id="inf-nombre-conductor" style="color: #2563eb;"></span></h3>
-                            <p style="margin: 5px 0 0 0; color: #64748b;">DNI: <span id="inf-dni-conductor"></span></p>
-                        </div>
-
-                        <h4 style="margin-bottom: 10px;">Detalle de Viajes y Cargas Asignadas</h4>
-                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
-                            <thead>
-                                <tr style="background-color: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
-                                    <th style="padding: 10px;">ID Viaje</th>
-                                    <th style="padding: 10px;">Origen</th>
-                                    <th style="padding: 10px;">Destino</th>
-                                    <th style="padding: 10px;">Carga / Mercadería</th>
-                                    <th style="padding: 10px;">Fecha</th>
-                                    <th style="padding: 10px;">Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabla-informe-body"></tbody>
-                        </table>
-                    </div>
-
-                    <div id="mensaje-informe" class="mensaje-resultado"></div>
-                </div>
-            </section>
-
-            <!-- 6. GESTIONAR TURNOS -->
-            <section id="sec-gestionar-turnos" class="modulo-seccion">
-                <h2>6. Gestionar Turnos</h2>
-                <div class="modulo-card" style="max-width: 600px; text-align: center;">
-                    <p style="color: #64748b; margin-bottom: 20px;">Control de cola de espera para asignación de viajes.</p>
-
-                    <div style="background: #f8fafc; border: 2px dashed #cbd5e1; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
-                        <span style="font-size: 0.9rem; color: #64748b; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">Turno Actual</span>
-                        <div id="display-turno-actual" style="font-size: 4rem; font-weight: 800; color: #2563eb; margin: 10px 0;">--</div>
-                    </div>
-
-                    <div style="display: flex; gap: 15px; justify-content: center;">
-                        <button type="button" class="btn-primary" style="background-color: #475569;" onclick="consultarTurnoActual(event)">
-                            Consultar Turno Actual
-                        </button>
-                        <button type="button" class="btn-primary" style="background-color: #2563eb;" onclick="saltarTurno(event)">
-                            Saltar Turno
-                        </button>
-                    </div>
-
-                    <div id="mensaje-turno" class="mensaje-resultado" style="margin-top: 20px;"></div>
-                </div>
-            </section>
-
-            <!-- 7. VALIDAR DISPONIBILIDAD -->
-            <section id="sec-validar-disponibilidad" class="modulo-seccion">
-                <h2>7. Validar Disponibilidad</h2>
-                <div class="modulo-card" style="max-width: 600px;">
-                    <p style="color: #64748b; margin-bottom: 20px;">
-                        Intenta asignar viajes a chóferes disponibles o no disponibles para verificar las reglas del sistema.
-                    </p>
-
-                    <form id="form-validar-disponibilidad" onsubmit="ejecutarAsignacionValidada(event)">
-                        <div class="form-group" style="margin-bottom: 15px;">
-                            <label for="select-camionero-disp">Camionero:</label>
-                            <select id="select-camionero-disp" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
-                                <option value="">Cargando camioneros...</option>
+                            <label>Filtrar por Chofer</label>
+                            <select id="repChoferSelect">
+                                <option value="">-- Todos los Choferes --</option>
                             </select>
                         </div>
-
-                        <div class="form-group" style="margin-bottom: 20px;">
-                            <label for="select-viaje-disp">Viaje A Asignar:</label>
-                            <select id="select-viaje-disp" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
-                                <option value="">Cargando viajes...</option>
+                        <div class="form-group">
+                            <label>Filtrar por Tipo de Carga</label>
+                            <select id="repCargaSelect">
+                                <option value="">-- Todas las Cargas --</option>
                             </select>
                         </div>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <button class="btn-primary" onclick="generarReporteFiltrado()" style="width: auto;">Filtrar Reporte</button>
+                        <button class="btn-secondary" onclick="window.print()" style="width: auto;">🖨️ Imprimir / PDF</button>
+                    </div>
+                </div>
 
-                        <button type="submit" class="btn-primary" style="width: 100%;">Intentar Asignar Viaje</button>
-                    </form>
-
-                    <div id="mensaje-disponibilidad" class="mensaje-resultado" style="margin-top: 20px;"></div>
+                <div class="tabla-contenedor">
+                    <table class="tabla-custom">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Chofer</th>
+                                <th>Patente</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Carga</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaReportes">
+                            <tr><td colspan="7" style="text-align: center;">Haz clic en "Filtrar Reporte" para consultar datos.</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
-            <!-- 8. HISTORIAL DE CAMBIOS -->
-            <section id="sec-historial-cambios" class="modulo-seccion">
-                <h2>8. Historial de Cambios / Auditoría</h2>
-                <div class="modulo-card">
-                    <p style="color: #64748b;">Módulo en mantenimiento.</p>
+            <!-- MÓDULO 5: AUDITORÍA Y TRAZABILIDAD -->
+            <section id="seccionTrazabilidad" class="modulo-seccion">
+                <h2>Historial de Auditoría y Trazabilidad</h2>
+                <div class="tabla-contenedor">
+                    <table class="tabla-custom">
+                        <thead>
+                            <tr>
+                                <th>Fecha / Hora</th>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>Detalle</th>
+                                <th>Motivo / Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaTrazabilidad">
+                            <tr><td colspan="5" style="text-align: center;">Cargando auditoría...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <!-- MODALES DE GESTIÓN -->
+    <!-- Modal Chofer -->
+    <div id="modalChofer" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalles del Chofer</h3>
+                <button class="modal-cerrar" onclick="cerrarModal('modalChofer')">&times;</button>
+            </div>
+            <form onsubmit="guardarEdicionChofer(event)">
+                <input type="hidden" id="modalChoferId">
+                <div class="form-grid">
+                    <div class="form-group"><label>Nombre</label><input type="text" id="modalChoferNombre" required></div>
+                    <div class="form-group"><label>Apellido</label><input type="text" id="modalChoferApellido" required></div>
+                    <div class="form-group"><label>DNI</label><input type="text" id="modalChoferDni" required></div>
+                    <div class="form-group"><label>Teléfono (WhatsApp)</label><input type="text" id="modalChoferTelefono" required></div>
+                    <div class="form-group"><label>Patente Camión</label><input type="text" id="modalChoferPatente" required></div>
+                    <div class="form-group">
+                        <label>Disponibilidad</label>
+                        <select id="modalChoferDisponible">
+                            <option value="Disponible">Disponible</option>
+                            <option value="No disponible">No disponible</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-whatsapp" onclick="enviarWhatsAppDirectoModal()">💬 Notificar por WhatsApp</button>
+                <button class="btn-secondary" style="background-color: #ef4444; color: white;" onclick="eliminarChoferModal()">🗑️ Eliminar Chofer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo Viaje -->
+    <div id="modalNuevoViaje" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Asignar Nuevo Viaje</h3>
+                <button class="modal-cerrar" onclick="cerrarModal('modalNuevoViaje')">&times;</button>
+            </div>
+            <form onsubmit="crearNuevoViaje(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>Chofer Asignado</label><select id="viajeChoferSelect"></select></div>
+                    <div class="form-group"><label>Origen</label><input type="text" id="viajeOrigen" placeholder="ej. Rosario" required></div>
+                    <div class="form-group"><label>Destino</label><input type="text" id="viajeDestino" placeholder="ej. Puerto San Lorenzo" required></div>
+                    <div class="form-group"><label>Tipo de Carga</label><select id="viajeCargaSelect" required></select></div>
+                    <div class="form-group"><label>Fecha del Viaje</label><input type="date" id="viajeFecha" required></div>
+                    <button type="submit" class="btn-primary">Confirmar y Enviar WhatsApp</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Cancelar Viaje -->
+    <div id="modalCancelarViaje" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cancelar Viaje</h3>
+                <button class="modal-cerrar" onclick="cerrarModal('modalCancelarViaje')">&times;</button>
+            </div>
+            <form onsubmit="confirmarCancelarViaje(event)">
+                <input type="hidden" id="cancelarViajeId">
+                <div class="form-group">
+                    <label>Motivo de Cancelación (Trazabilidad Obligatoria)</label>
+                    <textarea id="cancelarMotivo" rows="3" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1;" required placeholder="Especifique el motivo..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="background-color: #ef4444; margin-top: 15px;">Confirmar Cancelación</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Alta Chofer -->
+    <div id="modalAltaChofer" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Registrar Nuevo Chofer</h3>
+                <button class="modal-cerrar" onclick="cerrarModal('modalAltaChofer')">&times;</button>
+            </div>
+            <form onsubmit="crearChofer(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label>Nombre</label><input type="text" id="nuevoNombre" required></div>
+                    <div class="form-group"><label>Apellido</label><input type="text" id="nuevoApellido" required></div>
+                    <div class="form-group"><label>DNI (Contraseña)</label><input type="text" id="nuevoDni" required></div>
+                    <div class="form-group"><label>Teléfono</label><input type="text" id="nuevoTelefono" placeholder="549349..." required></div>
+                    <div class="form-group"><label>Patente Camión</label><input type="text" id="nuevaPatente" required></div>
+                    <button type="submit" class="btn-primary">Registrar Chofer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let choferesData = [];
+        let choferSugeridoActual = null;
+        let choferSeleccionadoModal = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const rol = (localStorage.getItem('rol') || '').trim().toLowerCase();
+            if (rol !== 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const lblUser = document.getElementById('lblNombreUsuario');
+            if (lblUser) lblUser.textContent = localStorage.getItem('usuario') || 'Admin';
+
+            await cargarTurnosYChoferes();
+            await cargarTiposCarga();
+            await cargarViajes();
+            await cargarTrazabilidad();
+
+            const inputFecha = document.getElementById('viajeFecha');
+            if (inputFecha) inputFecha.value = new Date().toISOString().substring(0, 10);
+        });
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        function cambiarModulo(seccionId, btn) {
+            document.querySelectorAll('.modulo-seccion').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            const sec = document.getElementById(seccionId);
+            if (sec) sec.classList.add('active');
+            if (btn) btn.classList.add('active');
+        }
+
+        // 1. TURNOS Y CHOFERES
+        async function cargarTurnosYChoferes() {
+            try {
+                const resSugerido = await fetch(`${API_URL}/turnos/siguiente`);
+                if (resSugerido.ok) {
+                    const dataSugerido = await resSugerido.json();
+                    choferSugeridoActual = dataSugerido.choferSugerido || null;
+
+                    const lblTurno = document.getElementById('lblTurnoSugerido');
+                    if (lblTurno) {
+                        const turnoActual = dataSugerido.turnoActual || 1;
+                        const totalChoferes = dataSugerido.totalChoferes || 0;
+                        if (dataSugerido.choferSugerido) {
+                            lblTurno.textContent = `Turno #${turnoActual} de ${totalChoferes}: ${dataSugerido.choferSugerido.nombre} ${dataSugerido.choferSugerido.apellido} (Patente: ${dataSugerido.choferSugerido.camion_patente || 'S/D'})`;
+                        } else {
+                            lblTurno.textContent = `Turno #${turnoActual} de ${totalChoferes}: Sin choferes disponibles`;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error al obtener turno:', e);
+            }
+
+            try {
+                const resChoferes = await fetch(`${API_URL}/camioneros`);
+                if (resChoferes.ok) {
+                    const data = await resChoferes.json();
+                    choferesData = Array.isArray(data) ? data : [];
+
+                    const selectRepChofer = document.getElementById('repChoferSelect');
+                    if (selectRepChofer) {
+                        selectRepChofer.innerHTML = '<option value="">-- Todos los Choferes --</option>';
+                    }
+
+                    const grid = document.getElementById('gridChoferes');
+                    if (grid) {
+                        grid.innerHTML = '';
+                        if (choferesData.length === 0) {
+                            grid.innerHTML = '<p style="color: #64748b; padding: 10px;">No hay choferes registrados aún.</p>';
+                        } else {
+                            choferesData.forEach((c, idx) => {
+                                if (selectRepChofer) {
+                                    const opt = document.createElement('option');
+                                    opt.value = c.dni;
+                                    opt.textContent = `${c.nombre} ${c.apellido}`;
+                                    selectRepChofer.appendChild(opt);
+                                }
+
+                                const esDisponible = c.disponible === 'Disponible';
+                                const card = document.createElement('div');
+                                card.className = 'chofer-card-click';
+                                card.onclick = () => abrirModalChofer(c);
+
+                                const orden = c.orden_turno || (idx + 1);
+
+                                card.innerHTML = `
+                                    <div>
+                                        <strong style="font-size: 1.05rem; color: #0f172a;">Turno #${orden}: ${c.nombre} ${c.apellido}</strong>
+                                        <p style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">
+                                            Patente: <strong>${c.camion_patente || 'S/D'}</strong> | DNI: ${c.dni}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <span class="badge ${esDisponible ? 'badge-disponible' : 'badge-nodisponible'}">
+                                            ${esDisponible ? '🟢 Disponible' : '🔴 Ocupado'}
+                                        </span>
+                                    </div>
+                                `;
+                                grid.appendChild(card);
+                            });
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error al cargar choferes:', e);
+            }
+        }
+
+        async function saltarTurnoException() {
+            const motivo = prompt('Motivo para saltar el turno (ej. Chofer no disponible):');
+            if (motivo === null) return;
+
+            try {
+                await fetch(`${API_URL}/turnos/saltar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario: localStorage.getItem('usuario'), motivo })
+                });
+
+                await cargarTurnosYChoferes();
+                await cargarTrazabilidad();
+            } catch (e) {
+                alert('Error al saltar turno.');
+            }
+        }
+
+        // MODALES CHOFER
+        function abrirModalChofer(c) {
+            choferSeleccionadoModal = c;
+            document.getElementById('modalChoferId').value = c.id;
+            document.getElementById('modalChoferNombre').value = c.nombre;
+            document.getElementById('modalChoferApellido').value = c.apellido;
+            document.getElementById('modalChoferDni').value = c.dni;
+            document.getElementById('modalChoferTelefono').value = c.telefono;
+            document.getElementById('modalChoferPatente').value = c.camion_patente || '';
+            document.getElementById('modalChoferDisponible').value = c.disponible || 'Disponible';
+
+            document.getElementById('modalChofer').classList.add('active');
+        }
+
+        async function guardarEdicionChofer(e) {
+            e.preventDefault();
+            const id = document.getElementById('modalChoferId').value;
+            const body = {
+                nombre: document.getElementById('modalChoferNombre').value,
+                apellido: document.getElementById('modalChoferApellido').value,
+                dni: document.getElementById('modalChoferDni').value,
+                telefono: document.getElementById('modalChoferTelefono').value,
+                camion_patente: document.getElementById('modalChoferPatente').value,
+                disponible: document.getElementById('modalChoferDisponible').value
+            };
+
+            try {
+                await fetch(`${API_URL}/camioneros/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                cerrarModal('modalChofer');
+                await cargarTurnosYChoferes();
+                await cargarTrazabilidad();
+            } catch (err) {
+                alert('Error al actualizar datos del chofer.');
+            }
+        }
+
+        async function eliminarChoferModal() {
+            if (!confirm('¿Seguro que deseas eliminar este chofer?')) return;
+            const id = document.getElementById('modalChoferId').value;
+            try {
+                await fetch(`${API_URL}/camioneros/${id}`, { method: 'DELETE' });
+                cerrarModal('modalChofer');
+                await cargarTurnosYChoferes();
+                await cargarTrazabilidad();
+            } catch (err) {
+                alert('Error al eliminar chofer.');
+            }
+        }
+
+        function enviarWhatsAppDirectoModal() {
+            if (!choferSeleccionadoModal) return;
+            const msg = encodeURIComponent(`Hola ${choferSeleccionadoModal.nombre}, te contactamos desde la central de logística.`);
+            window.open(`https://wa.me/${choferSeleccionadoModal.telefono}?text=${msg}`, '_blank');
+        }
+
+        // 2. VIAJES
+        async function cargarViajes() {
+            try {
+                const res = await fetch(`${API_URL}/viajes`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const viajes = Array.isArray(data) ? data : [];
+                const tbody = document.getElementById('tablaViajes');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                if (viajes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748b;">No hay viajes registrados.</td></tr>';
+                    return;
+                }
+
+                viajes.forEach(v => {
+                    const tr = document.createElement('tr');
+                    let badgeClass = 'badge-pendiente';
+                    if (v.estado === 'Completado') badgeClass = 'badge-completado';
+                    if (v.estado === 'En Proceso' || v.estado === 'Asignado') badgeClass = 'badge-proceso';
+                    if (v.estado === 'Cancelado') badgeClass = 'badge-cancelado';
+                    if (v.estado === 'Cancelado' || v.estado === 'Rechazado') badgeClass = 'badge-cancelado';
+
+                    const motivoTxt = v.motivo_cancelacion ? `<br><small style="color:#ef4444;">Motivo: ${v.motivo_cancelacion}</small>` : '';
+
+                    tr.innerHTML = `
+                        <td>#${v.id}</td>
+                        <td>${v.fecha || '-'}</td>
+                        <td><strong>${v.nombre_chofer || 'Sin Asignar'}</strong><br><small>${v.camion_patente || ''}</small></td>
+                        <td>${v.origen} ➔ ${v.destino}</td>
+                        <td>${v.carga}</td>
+                        <td><span class="badge ${badgeClass}">${v.estado}</span>${motivoTxt}</td>
+                        <td>
+                            ${v.estado !== 'Cancelado' ? `<button class="btn-secondary" style="padding: 4px 8px; font-size:0.8rem; background-color:#ef4444; color:white;" onclick="abrirModalCancelarViaje(${v.id})">Cancelar</button>` : '-'}
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                console.error('Error al cargar viajes:', e);
+            }
+        }
+
+        async function abrirModalNuevoViajeSugerido() {
+            await poblarSelectsViaje();
+            document.getElementById('modalNuevoViaje').classList.add('active');
+        }
+
+        async function poblarSelectsViaje() {
+            const selectChofer = document.getElementById('viajeChoferSelect');
+            if (selectChofer) {
+                selectChofer.innerHTML = '';
+                choferesData.forEach((c, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = c.dni;
+                    const orden = c.orden_turno || (idx + 1);
+                    opt.textContent = `Turno #${orden}: ${c.nombre} ${c.apellido} (${c.disponible})`;
+                    selectChofer.appendChild(opt);
+                });
+
+                // PRESELECCIONAR EL CHOFER SUGERIDO POR EL TURNO ACTUAL
+                if (choferSugeridoActual && choferSugeridoActual.dni) {
+                    selectChofer.value = choferSugeridoActual.dni;
+                }
+            }
+
+            try {
+                const resCargas = await fetch(`${API_URL}/cargas`);
+                if (resCargas.ok) {
+                    const data = await resCargas.json();
+                    const cargas = Array.isArray(data) ? data : [];
+                    const selectCarga = document.getElementById('viajeCargaSelect');
+                    if (selectCarga) {
+                        selectCarga.innerHTML = '';
+                        cargas.forEach(cg => {
+                            const opt = document.createElement('option');
+                            opt.value = cg.nombre;
+                            opt.textContent = cg.nombre;
+                            selectCarga.appendChild(opt);
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Error al cargar selector de cargas:', e);
+            }
+        }
+
+        async function crearNuevoViaje(e) {
+            e.preventDefault();
+            const dni_camionero = document.getElementById('viajeChoferSelect').value;
+            const origen = document.getElementById('viajeOrigen').value;
+            const destino = document.getElementById('viajeDestino').value;
+            const carga = document.getElementById('viajeCargaSelect').value;
+            const fecha = document.getElementById('viajeFecha').value;
+
+            try {
+                const res = await fetch(`${API_URL}/viajes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dni_camionero, origen, destino, carga, fecha })
+                });
+
+                if (res.ok) {
+                    const chofer = choferesData.find(c => c.dni === dni_camionero);
+                    if (chofer) {
+                        const msgWA = encodeURIComponent(`Hola ${chofer.nombre}, te confirmamos un NUEVO VIAJE asignado:\nOrigen: ${origen}\nDestino: ${destino}\nCarga: ${carga}\nFecha: ${fecha}`);
+                        window.open(`https://wa.me/${chofer.telefono}?text=${msgWA}`, '_blank');
+                    }
+                }
+
+                cerrarModal('modalNuevoViaje');
+                await cargarTurnosYChoferes();
+                await cargarViajes();
+                await cargarTrazabilidad();
+            } catch (err) {
+                alert('Error al crear el viaje.');
+            }
+        }
+
+        function abrirModalCancelarViaje(id) {
+            document.getElementById('cancelarViajeId').value = id;
+            document.getElementById('modalCancelarViaje').classList.add('active');
+        }
+
+        async function confirmarCancelarViaje(e) {
+            e.preventDefault();
+            const viajeId = document.getElementById('cancelarViajeId').value;
+            const motivo = document.getElementById('cancelarMotivo').value;
+
+            try {
+                await fetch(`${API_URL}/viajes/cancelar`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ viajeId, motivo, usuario: localStorage.getItem('usuario') })
+                });
+
+                cerrarModal('modalCancelarViaje');
+                await cargarViajes();
+                await cargarTrazabilidad();
+            } catch (err) {
+                alert('Error al cancelar el viaje.');
+            }
+        }
+
+        // 3. TIPOS DE CARGA (CRUD y Sincronización con Reportes)
+        async function cargarTiposCarga() {
+            try {
+                const res = await fetch(`${API_URL}/cargas`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const cargas = Array.isArray(data) ? data : [];
+
+                // Llenar lista en módulo de CRUD Cargas
+                const ul = document.getElementById('listaTiposCarga');
+                if (ul) {
+                    ul.innerHTML = '';
+                    if (cargas.length === 0) {
+                        ul.innerHTML = '<li style="color: #64748b;">No hay cargas registradas.</li>';
+                    } else {
+                        cargas.forEach(c => {
+                            const li = document.createElement('li');
+                            li.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;';
+                            li.innerHTML = `
+                                <span>🌾 <strong>${c.nombre}</strong></span>
+                                <button onclick="eliminarTipoCarga(${c.id})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: bold;">Eliminar</button>
+                            `;
+                            ul.appendChild(li);
+                        });
+                    }
+                }
+
+                // Llenar selector dinámico en el Módulo de Reportes
+                const selectRepCarga = document.getElementById('repCargaSelect');
+                if (selectRepCarga) {
+                    selectRepCarga.innerHTML = '<option value="">-- Todas las Cargas --</option>';
+                    cargas.forEach(cg => {
+                        const opt = document.createElement('option');
+                        opt.value = cg.nombre;
+                        opt.textContent = cg.nombre;
+                        selectRepCarga.appendChild(opt);
+                    });
+                }
+            } catch (e) {
+                console.error('Error al cargar tipos de carga:', e);
+            }
+        }
+
+        async function crearTipoCarga(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('inputNuevaCarga').value;
+            try {
+                await fetch(`${API_URL}/cargas`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre })
+                });
+                document.getElementById('inputNuevaCarga').value = '';
+                await cargarTiposCarga();
+                await cargarTrazabilidad();
+            } catch (err) {
+                alert('Error al crear tipo de carga.');
+            }
+        }
+
+        async function eliminarTipoCarga(id) {
+            try {
+                await fetch(`${API_URL}/cargas/${id}`, { method: 'DELETE' });
+                await cargarTiposCarga();
+                await cargarTrazabilidad();
+            } catch (err) {
+                alert('Error al eliminar tipo de carga.');
+            }
+        }
+
+        // 4. REPORTES
+        async function generarReporteFiltrado() {
+            const fechaInicio = document.getElementById('repFechaDesde').value;
+            const fechaFin = document.getElementById('repFechaHasta').value;
+            const dni_camionero = document.getElementById('repChoferSelect').value;
+            const carga = document.getElementById('repCargaSelect').value;
+
+            let url = `${API_URL}/reportes/filtrado?carga=${encodeURIComponent(carga)}`;
+            if (fechaInicio && fechaFin) url += `&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`;
+            if (dni_camionero) url += `&dni_camionero=${dni_camionero}`;
+
+            try {
+                const res = await fetch(url);
+                if (!res.ok) return;
+                const data = await res.json();
+                const viajes = Array.isArray(data) ? data : [];
+                const tbody = document.getElementById('tablaReportes');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                if (viajes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748b;">No se encontraron registros para los filtros seleccionados.</td></tr>';
+                    return;
+                }
+
+                viajes.forEach(v => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${v.fecha || '-'}</td>
+                        <td>${v.nombre_chofer || 'N/A'}</td>
+                        <td>${v.camion_patente || 'N/A'}</td>
+                        <td>${v.origen}</td>
+                        <td>${v.destino}</td>
+                        <td><strong>${v.carga}</strong></td>
+                        <td>${v.estado}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                console.error('Error al generar reporte:', e);
+            }
+        }
+
+        async function cargarTrazabilidad() {
+            try {
+                const res = await fetch(`${API_URL}/trazabilidad`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const historial = Array.isArray(data) ? data : [];
+                const tbody = document.getElementById('tablaTrazabilidad');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                if (historial.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748b;">Sin historial registrado.</td></tr>';
+                    return;
+                }
+
+                historial.forEach(t => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><small>${t.fecha}</small></td>
+                        <td><strong>${t.usuario}</strong></td>
+                        <td><span class="badge badge-info">${t.accion}</span></td>
+                        <td>${t.detalle}</td>
+                        <td>${t.motivo || '-'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (e) {
+                console.error('Error al cargar trazabilidad:', e);
+            }
+        }
+
+        function abrirModalNuevoChofer() {
+            document.getElementById('modalAltaChofer').classList.add('active');
+        }
+
+        async function crearChofer(e) {
+            e.preventDefault();
+            const body = {
+                nombre: document.getElementById('nuevoNombre').value,
+                apellido: document.getElementById('nuevoApellido').value,
+                dni: document.getElementById('nuevoDni').value,
+                telefono: document.getElementById('nuevoTelefono').value,
+                camion_patente: document.getElementById('nuevaPatente').value
+            };
+
+            try {
+                await fetch(`${API_URL}/camioneros`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                cerrarModal('modalAltaChofer');
+                await cargarTurnosYChoferes();
+                await cargarTrazabilidad();
+            } catch (err) {
+                alert('Error al registrar chofer.');
+            }
+        }
+
+        function cerrarModal(id) {
+            const m = document.getElementById(id);
+            if (m) m.classList.remove('active');
+        }
+    </script>
 </body>
 </html>
