@@ -3,38 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Camionero</title>
+    <title>Portal del Chofer - Centro Logístico</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <main class="login-container">
-        <section class="login-card" style="max-width: 500px; text-align: center;">
-            <header class="login-header">
-                <h2>Panel del Camionero</h2>
-                <p id="camionero-nombre-display" style="color: #64748b; margin-top: 5px; font-weight: 500;">Cargando perfil...</p>
-            </header>
+    <div class="chofer-container">
+        
+        <!-- CABECERA DE BIENVENIDA -->
+        <header class="chofer-header">
+            <div>
+                <h2>Hola, <span id="lblChoferNombre">Cargando...</span> 👋</h2>
+                <p class="subtitulo">DNI: <strong id="lblChoferDni">-</strong> | Patente: <strong id="lblChoferPatente">-</strong></p>
+            </div>
+            <button class="btn-logout" onclick="cerrarSesion()" style="width: auto; padding: 8px 16px;">Cerrar Sesión</button>
+        </header>
 
-            <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 10px; padding: 20px; margin: 20px 0;">
-                <span style="font-size: 0.85rem; color: #64748b; font-weight: bold; letter-spacing: 1px;">ESTADO ACTUAL</span>
-                <div id="badge-disponibilidad" style="margin-top: 10px; font-size: 1.2rem; font-weight: bold; padding: 8px 16px; border-radius: 20px; display: inline-block;">
-                    --
+        <!-- CUADRO INFORMATIVO DE TURNO ACTUAL Y PROXIMIDAD -->
+        <div class="box-turno-info">
+            <div class="box-turno-header">
+                <h3>🚛 Estado General del Turnero</h3>
+                <span id="badgeProximidadTurno" class="badge badge-info">Cargando...</span>
+            </div>
+            <div class="grid-turno-datos">
+                <div class="card-dato-turno">
+                    <span class="label-dato">Turno Actual en Central</span>
+                    <h4 id="lblTurnoActualSistema">Turno #-</h4>
+                    <p id="lblChoferEnTurno" style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">Chofer: -</p>
+                </div>
+                <div class="card-dato-turno destacado">
+                    <span class="label-dato">Mi Número de Turno</span>
+                    <h4 id="lblMiOrdenTurno">Turno #-</h4>
+                    <p style="font-size: 0.85rem; color: #0284c7; margin-top: 4px;">Posición Fija Asignada</p>
                 </div>
             </div>
+        </div>
 
-            <div style="display: flex; gap: 12px; justify-content: center;">
-                <button type="button" class="btn-primary" style="background-color: #16a34a; flex: 1;" onclick="cambiarMiDisponibilidad('Disponible')">Marcar Disponible</button>
-                <button type="button" class="btn-primary" style="background-color: #dc2626; flex: 1;" onclick="cambiarMiDisponibilidad('No disponible')">Marcar No Disponible</button>
+        <!-- CONTROL DE DISPONIBILIDAD DE TRABAJO -->
+        <div class="modulo-card" style="max-width: 100%; margin-bottom: 25px;">
+            <h3 style="font-size: 1.1rem; color: #0f172a; margin-bottom: 10px;">Mi Disponibilidad</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <span>Estado Actual:</span>
+                <span id="lblEstadoDisponibilidad" class="badge badge-info">Cargando...</span>
             </div>
-
-            <div id="mensaje-camionero" class="mensaje-resultado" style="margin-top: 15px;"></div>
-
-            <button type="button" onclick="cerrarSesion()" style="margin-top: 25px; background: none; border: none; color: #64748b; cursor: pointer; text-decoration: underline;">
-                Cerrar Sesión
+            <button id="btnCambiarDisponibilidad" class="btn-primary" onclick="alternarDisponibilidad()">
+                Cambiar Estado
             </button>
-        </section>
-    </main>
+        </div>
 
-    <script src="script.js"></script>
+        <!-- MIS VIAJES ASIGNADOS -->
+        <h3 style="color: #0f172a; margin-bottom: 15px;">Mis Viajes Asignados</h3>
+        <div id="listaMisViajes">
+            <p style="color: #64748b; text-align: center;">Cargando viajes asignados...</p>
+        </div>
+
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let camioneroId = localStorage.getItem('camionero_id');
+        let camioneroDni = localStorage.getItem('camionero_dni');
+        let estadoActual = 'Disponible';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const rol = localStorage.getItem('rol');
+            if (rol !== 'camionero' || !camioneroId) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            cargarInfoChoferYTurnos();
+            cargarMisViajes();
+        });
+
+        async function cargarInfoChoferYTurnos() {
+            try {
+                const res = await fetch(`${API_URL}/camionero/${camioneroId}/disponibilidad`);
+                const data = await res.json();
+
+                if (!res.ok) throw new Error('Error al obtener datos.');
+
+                document.getElementById('lblChoferNombre').textContent = `${data.nombre || ''} ${data.apellido || ''}`;
+                document.getElementById('lblChoferDni').textContent = data.dni || '-';
+                document.getElementById('lblChoferPatente').textContent = data.camion_patente || 'Sin Patente';
+                estadoActual = data.disponible || 'Disponible';
+
+                actualizarDisponibilidadUI();
+
+                const turnoActualSistema = data.turno_actual_sistema || 1;
+                const miOrdenTurno = data.orden_turno || 1;
+                const totalChoferes = data.total_choferes || 1;
+                const choferEnTurno = data.chofer_en_turno || 'Sin asignación';
+
+                document.getElementById('lblTurnoActualSistema').textContent = `Turno #${turnoActualSistema} de ${totalChoferes}`;
+                document.getElementById('lblChoferEnTurno').textContent = `En Turno: ${choferEnTurno}`;
+                document.getElementById('lblMiOrdenTurno').textContent = `Turno #${miOrdenTurno}`;
+
+                const badgeProximidad = document.getElementById('badgeProximidadTurno');
+                
+                if (turnoActualSistema === miOrdenTurno) {
+                    badgeProximidad.className = 'badge badge-disponible';
+                    badgeProximidad.textContent = '🔥 ¡ES TU TURNO AHORA!';
+                } else {
+                    let faltan = miOrdenTurno - turnoActualSistema;
+                    if (faltan < 0) faltan += totalChoferes;
+
+                    badgeProximidad.className = 'badge badge-proceso';
+                    badgeProximidad.textContent = `⏳ Faltan ${faltan} turno(s) para el tuyo`;
+                }
+
+            } catch (err) {
+                console.error('Error en portal chofer:', err);
+            }
+        }
+
+        function actualizarDisponibilidadUI() {
+            const lbl = document.getElementById('lblEstadoDisponibilidad');
+            const btn = document.getElementById('btnCambiarDisponibilidad');
+
+            if (estadoActual === 'Disponible') {
+                lbl.className = 'badge badge-disponible';
+                lbl.textContent = '🟢 Disponible';
+                btn.textContent = 'Marcar como NO DISPONIBLE / OCUPADO';
+                btn.style.backgroundColor = '#ef4444';
+            } else {
+                lbl.className = 'badge badge-nodisponible';
+                lbl.textContent = '🔴 No Disponible / Ocupado';
+                btn.textContent = 'Marcar como DISPONIBLE';
+                btn.style.backgroundColor = '#22c55e';
+            }
+        }
+
+        async function alternarDisponibilidad() {
+            const nuevoEstado = (estadoActual === 'Disponible') ? 'No disponible' : 'Disponible';
+
+            try {
+                const res = await fetch(`${API_URL}/camionero/${camioneroId}/disponibilidad`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nuevoEstado })
+                });
+
+                if (res.ok) {
+                    estadoActual = nuevoEstado;
+                    actualizarDisponibilidadUI();
+                }
+            } catch (err) {
+                alert('Error al actualizar disponibilidad.');
+            }
+        }
+
+        async function cargarMisViajes() {
+            const cont = document.getElementById('listaMisViajes');
+            try {
+                const res = await fetch(`${API_URL}/historial/${camioneroDni}`);
+                const viajes = await res.json();
+
+                if (!res.ok || viajes.length === 0) {
+                    cont.innerHTML = '<div class="modulo-card" style="max-width:100%; text-align:center;"><p style="color: #64748b;">No tienes viajes registrados actualmente.</p></div>';
+                    return;
+                }
+
+                cont.innerHTML = '';
+                viajes.forEach(v => {
+                    let badgeClass = 'badge-pendiente';
+                    if (v.estado === 'Completado') badgeClass = 'badge-completado';
+                    if (v.estado === 'En Proceso' || v.estado === 'Asignado') badgeClass = 'badge-proceso';
+                    if (v.estado === 'Cancelado' || v.estado === 'Rechazado') badgeClass = 'badge-cancelado';
+
+                    const esActivo = (v.estado === 'Asignado' || v.estado === 'En Proceso');
+
+                    const card = document.createElement('div');
+                    card.className = 'modulo-card';
+                    card.style.cssText = 'max-width: 100%; margin-bottom: 15px;';
+
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <strong style="font-size: 1.1rem; color: #0f172a;">Viaje #${v.id}</strong>
+                            <span class="badge ${badgeClass}">${v.estado}</span>
+                        </div>
+                        <p style="font-size: 0.95rem; margin-bottom: 4px;">📍 <strong>Origen:</strong> ${v.origen}</p>
+                        <p style="font-size: 0.95rem; margin-bottom: 4px;">🏁 <strong>Destino:</strong> ${v.destino}</p>
+                        <p style="font-size: 0.95rem; margin-bottom: 4px;">🌾 <strong>Carga:</strong> ${v.carga}</p>
+                        <p style="font-size: 0.85rem; color: #64748b;">📅 Fecha: ${v.fecha}</p>
+                        ${v.motivo_cancelacion ? `<p style="font-size: 0.85rem; color: #ef4444; margin-top: 8px;">❌ Motivo: ${v.motivo_cancelacion}</p>` : ''}
+                        
+                        ${esActivo ? `
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button class="btn-primary" style="background-color: #22c55e;" onclick="completarViaje(${v.id})">✅ Finalizar Viaje</button>
+                                <button class="btn-secondary" style="background-color: #ef4444; color: white;" onclick="rechazarViaje(${v.id})">❌ Rechazar Viaje</button>
+                            </div>
+                        ` : ''}
+                    `;
+                    cont.appendChild(card);
+                });
+
+            } catch (err) {
+                cont.innerHTML = '<div class="modulo-card" style="max-width:100%; text-align:center;"><p style="color: #64748b;">Sin viajes registrados.</p></div>';
+            }
+        }
+
+        // Acciones del Chofer sobre el Viaje
+        async function completarViaje(viajeId) {
+            if (!confirm('¿Confirmas que has completado y entregado este viaje?')) return;
+            try {
+                const res = await fetch(`${API_URL}/viajes/${viajeId}/estado`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        estado: 'Completado',
+                        usuario: localStorage.getItem('usuario') || 'Chofer'
+                    })
+                });
+
+                if (res.ok) {
+                    cargarMisViajes();
+                    cargarInfoChoferYTurnos();
+                }
+            } catch (e) {
+                alert('Error al marcar el viaje como finalizado.');
+            }
+        }
+
+        async function rechazarViaje(viajeId) {
+            const motivo = prompt('Por favor, indica la razón del rechazo del viaje:');
+            if (!motivo) return;
+
+            try {
+                const res = await fetch(`${API_URL}/viajes/${viajeId}/estado`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        estado: 'Rechazado',
+                        motivo: motivo,
+                        usuario: localStorage.getItem('usuario') || 'Chofer'
+                    })
+                });
+
+                if (res.ok) {
+                    cargarMisViajes();
+                    cargarInfoChoferYTurnos();
+                }
+            } catch (e) {
+                alert('Error al rechazar el viaje.');
+            }
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
