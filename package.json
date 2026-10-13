@@ -1,7 +1,7 @@
 {
 "name": "sistema-logistico-express",
 "version": "1.0.0",
-"description": "Sistema Web de Gestión Logística y Control Cíclico de Turnos",
+"description": "Sistema Web de Gestión Logística",
 "main": "server.js",
 "scripts": {
 "start": "node server.js",
