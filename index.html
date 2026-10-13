@@ -3,48 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Logística y Transporte - Login</title>
+    <title>Inicio de Sesión - Centro Logístico</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <main class="login-container">
-        <section class="login-card">
-            <header class="login-header">
-                <h2>Acceso al sistema</h2>
-                <p>Ingresa tus credenciales para acceder al sistema</p>
-            </header>
-
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="usuario">Usuario</label>
-                    <input 
-                        type="text" 
-                        id="usuario" 
-                        name="usuario" 
-                        placeholder="Ej: admin" 
-                        required 
-                        autocomplete="username"
-                    >
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <!-- LOGO DE LA EMPRESA -->
+                <img src="logo.png" alt="Logo Empresa" class="login-logo">
+                <h2>Centro Logístico</h2>
+                <p style="font-size: 0.9rem; color: #64748b;">Acceso de Operadores y Choferes</p>
+            </div>
+            <form onsubmit="realizarLogin(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Usuario / Nombre Chofer</label>
+                        <input type="text" id="loginUsuario" placeholder="ej. admin o Juan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Ingresar al Sistema</button>
+                    <div id="loginError" class="mensaje-resultado error"></div>
                 </div>
-
-                <div class="form-group">
-                    <label for="contraseña">Contraseña</label>
-                    <input 
-                        type="password" 
-                        id="contraseña" 
-                        name="contraseña" 
-                        placeholder="••••••••" 
-                        required 
-                        autocomplete="current-password"
-                    >
-                </div>
-
-                <button type="submit" class="btn-primary">Iniciar Sesión</button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
 
-    <script src="script.js"></script>
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const rol = localStorage.getItem('rol');
+            if (rol === 'admin') {
+                window.location.href = 'menu.html';
+            } else if (rol === 'camionero') {
+                window.location.href = 'camionero.html';
+            }
+        });
+
+        async function realizarLogin(e) {
+            e.preventDefault();
+            const usuario = document.getElementById('loginUsuario').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const msgError = document.getElementById('loginError');
+
+            msgError.style.display = 'none';
+
+            try {
+                const res = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    msgError.textContent = data.error || 'Credenciales incorrectas.';
+                    msgError.style.display = 'block';
+                    return;
+                }
+
+                localStorage.setItem('usuario', data.usuario);
+                localStorage.setItem('rol', data.rol);
+
+                if (data.rol === 'admin') {
+                    window.location.href = 'menu.html';
+                } else if (data.rol === 'camionero') {
+                    localStorage.setItem('camionero_id', data.camionero_id);
+                    localStorage.setItem('camionero_dni', data.dni);
+                    window.location.href = 'camionero.html';
+                }
+
+            } catch (err) {
+                msgError.textContent = 'Error al conectar con el servidor backend.';
+                msgError.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
